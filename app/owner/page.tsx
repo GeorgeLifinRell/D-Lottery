@@ -56,29 +56,49 @@ function Pickwinner() {
   }, [currentAccount]);
 
   const pickWinner = async () => {
-    const transaction = await contractInstance.pickWinner();
-    await transaction.wait();
+    try {
+      const transaction = await contractInstance.pickWinner();
+      await transaction.wait();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const resetLottery = async () => {
-    const transaction = await contractInstance.resetContract();
-    await transaction.wait();
+    try {
+      const transaction = await contractInstance.resetContract();
+      await transaction.wait();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
-    <div className="container">
-      <h1>Result Page</h1>
+    <div className="container mx-auto flex flex-col items-center justify-center min-h-screen bg-gray-800 text-white">
+      <h1 className="text-4xl font-bold mb-6 text-yellow-400">Result Page</h1>
+
       {isComplete ? (
-        <p>The winner is {winner}</p>
+        <p className="text-xl font-semibold text-green-400 mb-4">
+          The winner is {winner}
+        </p>
       ) : isOwnerConnected ? (
-        <button className="Pick Winner" onClick={pickWinner}>
+        <button
+          className="px-6 py-3 bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-600 transition duration-300 mb-4"
+          onClick={pickWinner}
+        >
           Pick Winner
         </button>
       ) : (
-        <p>You are not the owner</p>
+        <p className="text-xl font-semibold text-red-400 mb-4">
+          You are not the owner
+        </p>
       )}
-      <div className="reset-container">
-        <button className="Restart Lottery" onClick={resetLottery}>
+
+      <div className="reset-container mt-6">
+        <button
+          className="px-6 py-3 bg-red-500 text-white font-bold rounded-lg hover:bg-red-600 transition duration-300"
+          onClick={resetLottery}
+        >
           Reset Lottery
         </button>
       </div>

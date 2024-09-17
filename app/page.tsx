@@ -57,17 +57,33 @@ export default function Home() {
   };
 
   return (
-    <div className="container bg-slate-500">
-      <h1>D-Lottery Page</h1>
-      <div className="join-container">
+    <div className="container mx-auto flex flex-col items-center justify-center min-h-screen bg-gray-100 text-gray-900 relative">
+      <h1 className="text-5xl font-extrabold mb-8 text-gray-800">D-Lottery</h1>
+
+      {/* Contract Owner Button */}
+      <button
+        className="absolute top-8 right-8 bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-gray-900 transition duration-300"
+        onClick={() => (window.location.href = "/owner")}
+      >
+        Contract Owner Page
+      </button>
+
+      <div className="join-container w-full max-w-lg p-8 bg-white shadow-lg rounded-lg border border-gray-200">
         {isComplete ? (
           isWinner ? (
-            <p>You are the winner</p>
+            <p className="text-2xl font-semibold text-green-600 mb-6">
+              🎉 Congratulations! You are the winner!
+            </p>
           ) : (
-            <p>Better luck next time</p>
+            <p className="text-2xl font-semibold text-red-600 mb-6">
+              Sorry, better luck next time!
+            </p>
           )
         ) : (
-          <button className="enter-lottery" onClick={enterLottery}>
+          <button
+            className="enter-lottery w-full py-3 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 transition duration-300"
+            onClick={enterLottery}
+          >
             Enter Lottery
           </button>
         )}
