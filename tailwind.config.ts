@@ -8,10 +8,16 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      // colors: {
-      //   background: "var(--background)",
-      //   foreground: "var(--foreground)",
-      // },
+      keyframes: {
+        blink: {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0' },
+        },
+      },
+      animation: {
+        'blink-green': 'blink 1s infinite ease-in-out',
+        'blink-red': 'blink 1s infinite ease-in-out',
+      },
     },
   },
   plugins: [],

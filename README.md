@@ -1,6 +1,6 @@
 # D-Lottery
 
-This is a Decentralized Lottery project with atmost priority to transparency and privacy.
+This is a Decentralized Lottery project with utmost priority to transparency and privacy.
 
 ## Tech Stack Used
 
