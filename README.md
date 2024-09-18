@@ -25,8 +25,9 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ### Home Page
 
-<img width="1792" alt="Home Page" src="https://github.com/user-attachments/assets/5ce403d9-094c-453a-b989-502df47d56f0">
+<img width="1792" alt="Screenshot 2024-09-18 at 2 26 45 PM" src="https://github.com/user-attachments/assets/ad46a55d-24f5-47da-b687-3dd20d480066">
 
 ### Lottery Owner Page
 
-<img width="1792" alt="Contract Owner Page" src="https://github.com/user-attachments/assets/f6e798df-0d81-42e5-be84-fed18cd303fc">
+<img width="1792" alt="Screenshot 2024-09-18 at 2 26 54 PM" src="https://github.com/user-attachments/assets/3580ef21-1118-47c6-b146-409135d20298">
+
