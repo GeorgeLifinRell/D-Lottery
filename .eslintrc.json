@@ -1,3 +1,12 @@
 {
+  "env": {
+    "browser": true,
+    "es2021": true, // Enable ECMAScript 2021 features (includes ES6+)
+    "node": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2021, // Use the latest ECMAScript version
+    "sourceType": "module" // Enable parsing of ES6 module syntax
+  },
   "extends": ["next/core-web-vitals", "next/typescript"]
 }

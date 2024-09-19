@@ -5,21 +5,19 @@ import constants from "./constants";
 import toast, { Toaster } from "react-hot-toast"; // Import toast
 
 export default function Home() {
-  const [currentAccount, setCurrentAccount] = useState<string>("");
-  const [contractInstance, setContractInstance] =
-    useState<ethers.Contract | null>(null);
-  const [isComplete, setIsComplete] = useState<boolean>(false);
-  const [isWinner, setIsWinner] = useState<boolean>(false);
-  const [players, setPlayers] = useState<string[]>([]);
+  const [currentAccount, setCurrentAccount] = useState("");
+  const [contractInstance, setContractInstance] = useState(null);
+  const [isComplete, setIsComplete] = useState(false);
+  const [isWinner, setIsWinner] = useState(false);
+  const [players, setPlayers] = useState([]);
 
   useEffect(() => {
     const loadBlockchainData = async () => {
       if (window.ethereum) {
-        const provider: ethers.providers.Web3Provider =
-          new ethers.providers.Web3Provider(window.ethereum);
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
         try {
-          const signer: ethers.providers.JsonRpcSigner = provider.getSigner();
-          const address: string = await signer.getAddress();
+          const signer = provider.getSigner();
+          const address = await signer.getAddress();
 
           // Only show toast if the currentAccount changes for the first time
           if (!currentAccount) {
@@ -27,7 +25,7 @@ export default function Home() {
             toast.success("Connected with account: " + address);
           }
 
-          window.ethereum.on("accountsChanged", (accounts: string[]) => {
+          window.ethereum.on("accountsChanged", (accounts) => {
             setCurrentAccount(accounts[0]);
             toast("Account changed to: " + accounts[0], { icon: "🔄" });
           });
@@ -44,7 +42,7 @@ export default function Home() {
       try {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
-        const contractInstance: ethers.Contract = new ethers.Contract(
+        const contractInstance = new ethers.Contract(
           constants.contractAddress,
           constants.contractAbi,
           signer
@@ -52,7 +50,7 @@ export default function Home() {
         setContractInstance(contractInstance);
         const isComplete = await contractInstance.isComplete();
         setIsComplete(isComplete);
-        const winner: string = await contractInstance.getWinner();
+        const winner = await contractInstance.getWinner();
         winner === currentAccount ? setIsWinner(true) : setIsWinner(false);
         const players = await contractInstance.getPlayers();
         setPlayers(players);
@@ -88,13 +86,23 @@ export default function Home() {
     <div className="container mx-auto flex flex-col items-center justify-center min-h-screen bg-gray-100 text-gray-900 relative">
       <Toaster position="top-right" reverseOrder={false} />{" "}
       {/* Toast container */}
-      <h1 className="text-5xl font-extrabold mb-8 text-gray-800">D-Lottery</h1>
+      <h1 className="text-5xl font-extrabold mb-4 text-gray-800">D-Lottery</h1>
+      <h3 className="text-2xl font-bold mb-8 text-gray-600">
+        Decentralized lottery made with fairness at it&apos;s core!
+      </h3>
       {/* Contract Owner Button */}
       <button
         className="absolute top-8 right-8 bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-gray-900 transition duration-300"
         onClick={() => (window.location.href = "/owner")}
       >
         Contract Owner Page
+      </button>
+      {/* Rules Button */}
+      <button
+        className="absolute top-8 left-8 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300"
+        onClick={() => (window.location.href = "/rules")}
+      >
+        Rules Page
       </button>
       {/* Status Light */}
       <div className="flex items-center mb-4">
@@ -147,7 +155,7 @@ export default function Home() {
       </div>
       {/* Buy me a coffee button */}
       <a
-        href="https://www.buymeacoffee.com/yourpage" // Replace with your link
+        href="https://www.buymeacoffee.com/georgelifinrell"
         target="_blank"
         rel="noopener noreferrer"
         className="absolute bottom-8 right-8 bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition duration-300"

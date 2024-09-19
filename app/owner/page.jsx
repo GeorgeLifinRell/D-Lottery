@@ -2,15 +2,15 @@
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import constants from "../constants";
-import toast, { Toaster } from "react-hot-toast"; // Import toast
+import toast, { Toaster } from "react-hot-toast";
 
 function Owner() {
-  const [owner, setOwner] = useState<string>("");
-  const [contractInstance, setContractInstance] = useState<any>(null);
-  const [currentAccount, setCurrentAccount] = useState<string>("");
-  const [isOwnerConnected, setIsOwnerConnected] = useState<boolean>(false);
-  const [winner, setWinner] = useState<string>("");
-  const [isComplete, setIsComplete] = useState<boolean>(false);
+  const [, setOwner] = useState("");
+  const [contractInstance, setContractInstance] = useState(null);
+  const [currentAccount, setCurrentAccount] = useState("");
+  const [isOwnerConnected, setIsOwnerConnected] = useState(false);
+  const [winner, setWinner] = useState("");
+  const [isComplete, setIsComplete] = useState(false);
 
   useEffect(() => {
     const loadBlockchainData = async () => {
@@ -20,7 +20,7 @@ function Owner() {
           const signer = provider.getSigner();
           const address = await signer.getAddress();
           setCurrentAccount(address);
-          window.ethereum.on("accountsChanged", (accounts: string[]) => {
+          window.ethereum.on("accountsChanged", (accounts) => {
             setCurrentAccount(accounts[0]);
             toast("Account changed to: " + accounts[0], { icon: "🔄" }); // Inform on account change
           });
@@ -36,7 +36,7 @@ function Owner() {
       try {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
-        const contractInstance: ethers.Contract = new ethers.Contract(
+        const contractInstance = new ethers.Contract(
           constants.contractAddress,
           constants.contractAbi,
           signer
@@ -52,7 +52,7 @@ function Owner() {
           ? setIsOwnerConnected(true)
           : setIsOwnerConnected(false);
       } catch (err) {
-        toast.error("Failed to load contract data."); // Error in contract initialization
+        toast.error("Failed to load contract data.");
       }
     };
 
@@ -62,7 +62,7 @@ function Owner() {
 
   const pickWinner = async () => {
     if (!isOwnerConnected) {
-      toast.error("You are not the contract owner!"); // Inform if not owner
+      toast.error("You are not the contract owner!");
       return;
     }
     try {
