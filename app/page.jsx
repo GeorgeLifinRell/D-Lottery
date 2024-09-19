@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import constants from "./constants";
-import toast, { Toaster } from "react-hot-toast"; // Import toast
+import toast, { Toaster } from "react-hot-toast";
 
 export default function Home() {
   const [currentAccount, setCurrentAccount] = useState("");
@@ -10,6 +10,10 @@ export default function Home() {
   const [isComplete, setIsComplete] = useState(false);
   const [isWinner, setIsWinner] = useState(false);
   const [players, setPlayers] = useState([]);
+  const [, setOwner] = useState("");
+  const [isOwnerConnected, setIsOwnerConnected] = useState(false);
+
+  const paymentAddress = constants.ownerAddress;
 
   useEffect(() => {
     const loadBlockchainData = async () => {
@@ -54,6 +58,11 @@ export default function Home() {
         winner === currentAccount ? setIsWinner(true) : setIsWinner(false);
         const players = await contractInstance.getPlayers();
         setPlayers(players);
+        const owner = await contractInstance.getManager();
+        setOwner(owner);
+        owner === currentAccount
+          ? setIsOwnerConnected(true)
+          : setIsOwnerConnected(false);
       } catch (err) {
         toast.error("Failed to load contract or players data.");
       }
@@ -61,7 +70,7 @@ export default function Home() {
 
     loadBlockchainData();
     contract();
-  }, [currentAccount]); // Watch currentAccount changes
+  }, [currentAccount]);
 
   const enterLottery = async () => {
     if (!contractInstance) {
@@ -82,21 +91,52 @@ export default function Home() {
     }
   };
 
+  const handleNavToContractOwnerPage = async () => {
+    isOwnerConnected
+      ? (window.location.href = "/owner")
+      : toast.error("You are not the owner.");
+  };
+
+  const sendPayment = async () => {
+    if (!window.ethereum) {
+      toast.error("MetaMask is not installed. Please install MetaMask.");
+      return;
+    }
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    try {
+      const tx = await signer.sendTransaction({
+        to: paymentAddress,
+        value: ethers.utils.parseEther("0.01"),
+      });
+      toast.loading("Sending ETH...");
+      await tx.wait();
+      toast.success(
+        "Payment successful 🎉\nYour support motivates me to do more! "
+      );
+    } catch (err) {
+      toast.error("Transaction failed. Please try again.");
+    }
+  };
+
   return (
     <div className="container mx-auto flex flex-col items-center justify-center min-h-screen bg-gray-100 text-gray-900 relative">
-      <Toaster position="top-right" reverseOrder={false} />{" "}
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+        toastOptions={{
+          style: {
+            minWidth: "auto",
+            maxWidth: "100%",
+            wordWrap: "break-word",
+          },
+        }}
+      />{" "}
       {/* Toast container */}
       <h1 className="text-5xl font-extrabold mb-4 text-gray-800">D-Lottery</h1>
       <h3 className="text-2xl font-bold mb-8 text-gray-600">
         Decentralized lottery made with fairness at it&apos;s core!
       </h3>
-      {/* Contract Owner Button */}
-      <button
-        className="absolute top-8 right-8 bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-gray-900 transition duration-300"
-        onClick={() => (window.location.href = "/owner")}
-      >
-        Contract Owner Page
-      </button>
       {/* Rules Button */}
       <button
         className="absolute top-8 left-8 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300"
@@ -125,7 +165,8 @@ export default function Home() {
             </p>
           ) : (
             <p className="text-2xl font-semibold text-red-600 mb-6">
-              Sorry, better luck next time!
+              You&apos;re one step behind being the Web3 billionaire. Better
+              luck next time!
             </p>
           )
         ) : (
@@ -153,15 +194,31 @@ export default function Home() {
           </>
         )}
       </div>
-      {/* Buy me a coffee button */}
-      <a
-        href="https://www.buymeacoffee.com/georgelifinrell"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="absolute bottom-8 right-8 bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition duration-300"
-      >
-        Buy me a coffee ☕
-      </a>
+      <div className="absolute bottom-8 right-8 flex space-x-4">
+        <a
+          href="https://www.buymeacoffee.com/georgelifinrell"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition duration-300"
+        >
+          Buy me a coffee ☕
+        </a>
+
+        {/* Support Creator ETH Payment Button */}
+        <button
+          className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300"
+          onClick={sendPayment}
+        >
+          Support Creator 💰
+        </button>
+        {/* Contract Owner Button */}
+        <button
+          className="bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-gray-900 transition duration-300"
+          onClick={handleNavToContractOwnerPage}
+        >
+          Contract Owner Page
+        </button>
+      </div>
     </div>
   );
 }

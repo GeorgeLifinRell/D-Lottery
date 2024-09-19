@@ -96,7 +96,7 @@ function Owner() {
 
   return (
     <div className="container mx-auto flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
-      <Toaster position="top-right" reverseOrder={false} />{" "}
+      <Toaster position="top-center" reverseOrder={false} />{" "}
       {/* Toast container */}
       <h1 className="text-5xl font-bold mb-10 text-gray-800">Owner Panel</h1>
       <div className="w-full max-w-2xl bg-white shadow-xl rounded-lg p-8">
@@ -123,14 +123,6 @@ function Owner() {
             >
               Pick Winner
             </button>
-
-            {/* Reset Lottery Button */}
-            <button
-              className="px-8 py-4 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 transition duration-300"
-              onClick={resetLottery}
-            >
-              Reset Lottery
-            </button>
           </div>
         ) : (
           <div className="text-center mb-8">
@@ -142,7 +134,16 @@ function Owner() {
             </p>
           </div>
         )}
-
+        {isOwnerConnected ? (
+          <button
+            className="px-8 py-4 self-center bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 transition duration-300"
+            onClick={resetLottery}
+          >
+            Reset Lottery
+          </button>
+        ) : (
+          <></>
+        )}
         {/* Footer */}
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-400">

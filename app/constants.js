@@ -137,5 +137,6 @@ const contractAbi = [
     type: "function",
   },
 ];
+const ownerAddress = "0x225e2753E5721B69Cc3598E261D80cD421DcE176";
 
-export default { contractAddress, contractAbi };
+export default { contractAddress, contractAbi, ownerAddress };
