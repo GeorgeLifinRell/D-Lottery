@@ -29,6 +29,21 @@ export default function Home() {
             toast.success("Connected with account: " + address);
           }
 
+          const accounts = await provider.listAccounts();
+          if (accounts.length === 0) {
+            toast.error("No account connected. Please connect MetaMask.");
+            const requestedAccounts = await window.ethereum.request({
+              method: "eth_requestAccounts",
+            });
+            setCurrentAccount(requestedAccounts[0]);
+            toast.success("Connected with account: " + requestedAccounts[0]);
+          } else {
+            // Set the current account if already connected
+            const address = accounts[0];
+            setCurrentAccount(address);
+            toast.success("Connected with account: " + address);
+          }
+
           window.ethereum.on("accountsChanged", (accounts) => {
             setCurrentAccount(accounts[0]);
             toast("Account changed to: " + accounts[0], { icon: "🔄" });

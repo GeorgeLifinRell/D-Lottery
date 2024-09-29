@@ -22,10 +22,10 @@ function Owner() {
           setCurrentAccount(address);
           window.ethereum.on("accountsChanged", (accounts) => {
             setCurrentAccount(accounts[0]);
-            toast("Account changed to: " + accounts[0], { icon: "🔄" }); // Inform on account change
+            toast("Account changed to: " + accounts[0], { icon: "🔄" });
           });
         } catch (err) {
-          toast.error("Failed to load account. Please check MetaMask."); // Error handling
+          toast.error("Failed to load account. Please check MetaMask.");
         }
       } else {
         toast.error("Please install MetaMask to continue.");
@@ -73,13 +73,13 @@ function Owner() {
     } catch (err) {
       toast.error("Error picking winner. Please try again.");
     } finally {
-      toast.dismiss(); // Remove the loading toast
+      toast.dismiss();
     }
   };
 
   const resetLottery = async () => {
     if (!isOwnerConnected) {
-      toast.error("You are not the contract owner!"); // Inform if not owner
+      toast.error("You are not the contract owner!");
       return;
     }
     try {
@@ -90,7 +90,7 @@ function Owner() {
     } catch (err) {
       toast.error("Error resetting lottery. Please try again.");
     } finally {
-      toast.dismiss(); // Remove the loading toast
+      toast.dismiss();
     }
   };
 
@@ -111,18 +111,29 @@ function Owner() {
             </p>
           </div>
         ) : isOwnerConnected ? (
-          <div className="text-center mb-8">
+          <div className="mb-8">
             <p className="text-xl font-semibold text-blue-600 mb-6">
               You are connected as the contract owner.
             </p>
-
-            {/* Pick Winner Button */}
-            <button
-              className="px-8 py-4 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 transition duration-300 mb-4"
-              onClick={pickWinner}
-            >
-              Pick Winner
-            </button>
+            <div className="flex justify-center space-x-4">
+              {" "}
+              <button
+                className="px-8 py-4 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 transition duration-300"
+                onClick={pickWinner}
+              >
+                Pick Winner
+              </button>
+              {isOwnerConnected ? (
+                <button
+                  className="px-8 py-4 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 transition duration-300"
+                  onClick={resetLottery}
+                >
+                  Reset Lottery
+                </button>
+              ) : (
+                <></>
+              )}
+            </div>
           </div>
         ) : (
           <div className="text-center mb-8">
@@ -134,17 +145,6 @@ function Owner() {
             </p>
           </div>
         )}
-        {isOwnerConnected ? (
-          <button
-            className="px-8 py-4 self-center bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 transition duration-300"
-            onClick={resetLottery}
-          >
-            Reset Lottery
-          </button>
-        ) : (
-          <></>
-        )}
-        {/* Footer */}
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-400">
             Contract Address: {constants.contractAddress}
